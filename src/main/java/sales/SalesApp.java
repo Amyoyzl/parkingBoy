@@ -9,8 +9,8 @@ public class SalesApp {
 
 	public void generateSalesActivityReport(String salesId, int maxRow, boolean isNatTrade, boolean isSupervisor) {
 		
-		SalesDao salesDao = new SalesDao();
-		SalesReportDao salesReportDao = new SalesReportDao();
+		SalesDao salesDao = createSaleDao();
+		SalesReportDao salesReportDao = createSalesReportDao();
 		
 		if (salesId == null) {
 			return;
@@ -31,9 +31,21 @@ public class SalesApp {
 		/* the filteredReportDataList is never used, if it will used in generateReport() ? */
 		SalesActivityReport report = this.generateReport(headers, reportDataList);
 		
-		EcmService ecmService = new EcmService();
+		EcmService ecmService = createEcmService();
 		ecmService.uploadDocument(report.toXml());
 		
+	}
+
+	protected EcmService createEcmService() {
+		return new EcmService();
+	}
+
+	protected SalesReportDao createSalesReportDao() {
+		return new SalesReportDao();
+	}
+
+	protected SalesDao createSaleDao() {
+		return new SalesDao();
 	}
 
 	protected boolean hasEffective(Sales sales) {
